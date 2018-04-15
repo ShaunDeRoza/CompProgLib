@@ -9,6 +9,35 @@ for(int n=1;n<25; n++){
 	}
 }
 
+//get a vector of all possible pairings
+vector<pair<int,int>> curPairs;
+vector<vector<pair<int,int>>> allPairs;
+vector<bool> chosen(20), ydone(20);
+
+void getPairings(int n,int start=0){
+    if(curPairs.size()==n/2) allPairs.push_back(curPairs);
+    else{
+        for(int i=start; i<n; i++){
+            if(chosen[i]) continue;
+            chosen[i]=true;
+            for(int j=i+1; j<n; j++){
+                if(chosen[j]) continue;
+                //chosen[i]=true;
+                chosen[j]=true;
+                curPairs.push_back({i,j});
+                getPairings(n, i);
+                //chosen[i]=false;
+                chosen[j]=false;
+                curPairs.pop_back();
+            }
+            chosen[i]=false;
+            //ydone[i]=true;
+        }
+        
+    }
+    
+}
+
 //combinatorial bitmask
 
 class CBM{
