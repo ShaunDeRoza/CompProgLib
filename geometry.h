@@ -62,3 +62,49 @@ template<class T> class ConvexHull{
     }
     
 };
+
+//convex hull trick with pointer walk
+
+class CHT{
+public:
+  vector<pair<long long, long long>> lines;
+  int pos;
+  CHT():pos(0){}
+  
+  //adding lines to the hull
+
+  bool isBad(int l1, int l2, int l3){
+    long long m1=lines[l1].first, m2=lines[l2].first, m3=lines[l3].first;
+    long long c1=lines[l1].second, c2=lines[l2].second, c3=lines[l3].second;
+    return (__int128)(c1-c3)*(m2-m1)<(__int128)(c1-c2)*(m3-m1);
+  }
+  void add(long long m, long long c){
+    lines.push_back(make_pair(m,c));
+    
+    int lsz=lines.size();
+    while(lsz>=3 && isBad(lsz-3,lsz-2,lsz-1)){
+      lines.erase(lines.end()-2);
+      lsz=lines.size();
+    }
+    
+
+  }
+  
+  //using a pointer walk to find the line that gives the largest value at a point
+  long long query(long long x){
+    int lsz=lines.size();
+
+    
+    if(pos>=lsz)
+      pos=lsz-1;
+    while(pos<lsz-1 && lines[pos].first*x+lines[pos].second<lines[pos+1].first*x
+	  +lines[pos+1].second){
+      pos++;
+    } 
+    
+    return lines[pos].first*x+lines[pos].second;
+  }
+
+  
+};
+
